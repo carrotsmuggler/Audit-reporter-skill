@@ -108,7 +108,7 @@ Each contract or library block has up to 4 subsections:
 
 **2. Appendix** (optional) — one appendix per ultra-important function with complex or non-obvious logic that cannot be explained clearly in one sentence inside the Summary. 4 lines max each. Write in prose — the appendix is a text description first. Small code snippets may be included only as supporting material when they clarify something that prose alone cannot (e.g. a non-obvious formula). A pure pseudocode or code-only appendix is not acceptable. Only include an appendix when it adds real value; most contracts will not need one, and many contracts should have zero appendices.
 
-**3. Privileged functions** (if any) — a bullet list of functions gated by access control, role checks, or special permissions.
+**3. Privileged functions** (if any) — a bullet list of function names only for functions gated by access control, role checks, or special permissions. Output one function per line. Do not include roles, modifiers, caller types, or annotations such as `(owner)`.
 
 **4. Core invariants** (optional, max 6) — specific properties that must always hold, tied to actual contract mechanics. Avoid generic statements like "total supply must be correct".
 

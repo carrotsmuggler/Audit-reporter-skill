@@ -8,7 +8,7 @@ This skill does not perform a full independent security audit. It helps transfor
 
 The skill runs a four-step workflow against a list of source files:
 
-1. **Description mode** — generates `contract-descriptions.md` for contracts and libraries in scope, following the configured structure.
+1. **Description mode** — generates `contract-descriptions.md` for contracts and libraries in scope, following the configured structure (including a privileged-functions list with function names only, one per line).
 2. **Discovery** — scans every file for `@issue` and `@audit` inline tags, assigns sequential index numbers, writes `discovery.md`, and annotates the source files in-place.
 3. **Validation** — each discovered tagged item is reviewed for correctness; false positives are documented and discarded.
 4. **Report** — each validated issue gets an `issue-{index}.md` written using the active report template.
