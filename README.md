@@ -1,17 +1,25 @@
 # audit-reporter
 
-A Claude Code skill for running structured smart contract security audits on Solidity and Rust (Solana, Soroban) codebases.
+A Claude Code skill for structuring audit writeups from user-provided findings on Solidity and Rust (Solana, Soroban) codebases.
+
+This skill does not perform a full independent security audit. It helps transform scoped files and user-marked concerns into standardized descriptions and report artifacts.
 
 ## What it does
 
 The skill runs a four-step workflow against a list of source files:
 
-1. **Description mode** — generates `contract-descriptions.md` summarising each contract in scope: purpose, key operations, privileged functions, and core invariants.
+1. **Description mode** — generates `contract-descriptions.md` for contracts and libraries in scope, following the configured structure.
 2. **Discovery** — scans every file for `@issue` and `@audit` inline tags, assigns sequential index numbers, writes `discovery.md`, and annotates the source files in-place.
-3. **Validation** — each discovered issue is assessed for correctness; false positives are documented and discarded.
-4. **Report** — each valid issue gets an `issue-{index}.md` written using the active report template.
+3. **Validation** — each discovered tagged item is reviewed for correctness; false positives are documented and discarded.
+4. **Report** — each validated issue gets an `issue-{index}.md` written using the active report template.
 
 All output lands in an `audit-reporter/` directory (or `audit-reporter_N/` if one already exists) relative to the audited project's root. Progress is tracked in `<output-dir>/todo.md`.
+
+## What it does not do
+
+- It does not replace a human-led security audit.
+- It does not guarantee vulnerability discovery from raw code alone.
+- It depends on user-provided scope and user-marked `@issue` / `@audit` tags for the Discovery to Validation to Report flow.
 
 ## Usage
 
@@ -23,9 +31,10 @@ Install the skill into Claude Code, then trigger it from any project:
 
 Or trigger it naturally:
 
-> "audit these contracts", "run a security review", "report these findings", "describe the contracts"
+> "report these findings", "describe the contracts", "run discovery mode", "generate issue reports"
 
 On first run the skill asks:
+
 - Which files are in scope (or reads `scope.txt` if present)
 - Whether to run description mode
 - Whether to run the full discovery-validation-report (DVR) workflow
@@ -35,7 +44,7 @@ After that single setup exchange, it runs to completion without further prompts.
 
 ## Inline tagging
 
-Mark issues directly in source files before running the skill:
+Mark candidate findings directly in source files before running the skill:
 
 ```solidity
 // @issue reentrancy possible — external call before state update
@@ -48,7 +57,7 @@ function withdraw(uint256 amount) external {
 - `@issue` — flags a highly likely vulnerability
 - `@audit` — flags an area of concern needing investigation
 
-Discovery indexes every tag, then validation and reporting work through the list.
+Discovery indexes every tag, then validation and reporting work through that indexed list.
 
 ## Repository layout
 
