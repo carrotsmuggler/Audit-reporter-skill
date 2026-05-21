@@ -1,6 +1,6 @@
 ---
 name: audit-reporter
-description: Smart contract audit reporting assistant for Solidity and Rust (Solana, Soroban) codebases. Runs a structured reporting workflow: scope resolution, contract/library description generation, @issue/@audit tag discovery and indexing, issue validation, and formal report writing. It supports user-led audits by organizing and writing outputs; it is not a substitute for a full independent security audit. Trigger this skill whenever the user wants to generate vulnerability reports, describe contracts, discover or validate @issue stubs, write up findings, or run this structured reporting workflow.
+description: "Smart contract audit reporting assistant for Solidity and Rust (Solana, Soroban) codebases. Runs a structured reporting workflow: scope resolution, contract/library description generation, @issue/@audit tag discovery and indexing, issue validation, and formal report writing. It supports user-led audits by organizing and writing outputs; it is not a substitute for a full independent security audit. Trigger this skill whenever the user wants to generate vulnerability reports, describe contracts, discover or validate @issue stubs, write up findings, or run this structured reporting workflow."
 ---
 
 # Audit Reporter
