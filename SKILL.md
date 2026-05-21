@@ -94,15 +94,19 @@ Mark items `[x]` as they complete. After discovery, add one line per discovered 
 
 ## Step 1: Description Mode
 
-Organized per source file. Each section in `<output-dir>/contract-descriptions.md` corresponds to one file in scope. Within a file section, each contract found in that file gets its own block.
+Generate descriptions only for Solidity contracts and libraries. Do not generate descriptions for interfaces.
+
+Organized per source file. Each section in `<output-dir>/contract-descriptions.md` corresponds to one file in scope. Within a file section, each contract or library declaration found in that file gets its own block.
+
+If a file contains only interfaces, omit that file from `contract-descriptions.md`.
 
 Use the filename (relative path) as the section header. Separate file sections with `---`. If a file contains only one contract, a single block is sufficient.
 
-Each contract block has up to 4 subsections:
+Each contract or library block has up to 4 subsections:
 
 **1. Summary** — a single flowing prose section. Write the high-level purpose of the contract (3–4 lines), then how it fits into the broader system (1–2 lines), then the key operations it performs — one line per important function, woven into the prose as natural continuation. Do not introduce the operations with a label or phrase like "Key operations include" — just write them as part of the paragraph flow. Skip trivial getters, setters, and boilerplate. Split into multiple paragraphs if the description grows long. Clarity over completeness.
 
-**2. Appendix** (optional) — one appendix per ultra-important function with complex or non-obvious logic. 4 lines max each. Write in prose — the appendix is a text description first. Small code snippets may be included only as supporting material when they clarify something that prose alone cannot (e.g. a non-obvious formula). A pure pseudocode or code-only appendix is not acceptable. Only include an appendix when it adds real value; most contracts will not need one.
+**2. Appendix** (optional) — one appendix per ultra-important function with complex or non-obvious logic that cannot be explained clearly in one sentence inside the Summary. 4 lines max each. Write in prose — the appendix is a text description first. Small code snippets may be included only as supporting material when they clarify something that prose alone cannot (e.g. a non-obvious formula). A pure pseudocode or code-only appendix is not acceptable. Only include an appendix when it adds real value; most contracts will not need one, and many contracts should have zero appendices.
 
 **3. Privileged functions** (if any) — a bullet list of functions gated by access control, role checks, or special permissions.
 
@@ -110,7 +114,7 @@ Each contract block has up to 4 subsections:
 
 ### Style rules
 
-- Start every contract description with "The [ContractName] contract ...".
+- Start every contract description with "The [ContractName] contract ..." and every library description with "The [LibraryName] library ...".
 - Write in present tense. Be concise — do not over-word.
 
 For a worked example of the expected output format, see `examples/contract-description.md` (pre-loaded in context).
@@ -148,12 +152,12 @@ For each issue in `discovery.md`, create `<output-dir>/issue-{index}.md`.
 
 ```bash
 total=<issue count from discovery>
-n=$(( total / 4 ))
-n=$(( n < 1 ? 1 : (n > 4 ? 4 : n) ))
+n=$(( (total + 3) / 4 ))
+n=$(( n > 4 ? 4 : n ))
 echo "Spawning $n subagents for $total issues"
 ```
 
-Distribute issues evenly across the `n` subagents. Run all in parallel.
+Distribute issues across the `n` subagents so each agent gets 3 to 4 issues when feasible. If this cannot be satisfied exactly, keep assignment as balanced as possible; if the 4-agent cap is hit, allow more than 4 issues per agent. Run all in parallel.
 
 Each subagent must print to the terminal at the start which issues it has been assigned, and print a brief status update for each issue once it finishes (e.g. "Issue #3 — validated and reported" or "Issue #5 — rejected as false positive").
 
@@ -191,7 +195,9 @@ Use the report template passed in from the main agent. Write ONE report per issu
 
 **Additional rules:**
 - No line numbers anywhere.
-- No filler labels — never write "The walkthrough:", "The exploit path:", "In detail:". Just write the content.
+- No filler labels or transition crutches — never write "The walkthrough:", "The exploit path:", "In detail:", "Concretely:", "Specifically:", or similar. Just write the content.
+- Use plain technical language. Avoid dramatic, promotional, ornamental, or theatrical wording.
+- Prefer short, direct sentences and concise phrasing over style.
 - Short sentences. Cut anything that restates without adding facts.
 - For **Low and Informational** issues: the entire Description must be 4 lines or fewer.
 - For **Medium and High** issues: use only as many sentences as the content strictly requires.
